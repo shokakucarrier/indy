@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <infinispan xmlns="urn:infinispan:config:11.0">
-
   <cache-container default-cache="local" name="IndyCacheManager" shutdown-hook="DEFAULT" statistics="true">
+    <serialization marshaller="org.infinispan.commons.marshall.JavaSerializationMarshaller">
+      <white-list>
+        <regex>org.commonjava.indy.model.core.*</regex>
+        <regex>java.util.*</regex>
+      </white-list>
+    </serialization>
     <local-cache-configuration name="local-template" statistics="true">
-      <!-- eviction is DEPRECATED, use memory element instead -->
       <memory>
         <off-heap size="20971520" eviction="MEMORY"/><!-- 20M -->
       </memory>
@@ -11,7 +15,11 @@
 
     <local-cache name="local" configuration="local-template"/>
 
-    <local-cache name="content-metadata" configuration="local-template"/>
+    <local-cache name="store-data-v2" configuration="local-template"/>
+
+    <local-cache name="store-by-package" configuration="local-template"/>
+
+    <local-cache name="affected-by-stores" configuration="local-template"/>
 
   </cache-container>
 </infinispan>

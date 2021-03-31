@@ -22,7 +22,9 @@ import org.commonjava.indy.folo.model.TrackingKey;
 import org.commonjava.indy.model.core.AccessChannel;
 import org.commonjava.indy.model.core.StoreKey;
 import org.commonjava.indy.model.core.StoreType;
+import org.hibernate.search.cfg.Environment;
 import org.infinispan.Cache;
+import org.infinispan.configuration.cache.Configuration;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.manager.DefaultCacheManager;
 import org.infinispan.manager.EmbeddedCacheManager;
@@ -31,6 +33,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.util.Properties;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -55,8 +59,17 @@ public class FoloRecordCacheTest
     @BeforeClass
     public static void setupClass()
     {
-        cacheManager =
-                new DefaultCacheManager( new ConfigurationBuilder().simpleCache( true ).build() );
+        Properties properties = new Properties();
+        properties.put( Environment.MODEL_MAPPING, new FoloCacheProducer().getSearchMapping() );
+
+        Configuration configuration = new ConfigurationBuilder()
+                        .indexing().enabled(false)
+                        .withProperties(properties)
+                        .build();
+
+        cacheManager = new DefaultCacheManager();
+        cacheManager.defineConfiguration( "sealed", configuration );
+        cacheManager.defineConfiguration( "in-progress", configuration );
 
         sealed = cacheManager.getCache( "sealed", true );
         inProgress = cacheManager.getCache( "in-progress", true );
