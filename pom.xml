@@ -34,9 +34,9 @@
   <inceptionYear>2011-2020</inceptionYear>
   
   <scm>
-    <connection>scm:git:https://github.com/CommonJava/indy</connection>
-    <developerConnection>scm:git:https://github.com/CommonJava/indy</developerConnection>
-    <url>http://github.com/Commonjava/indy</url>
+    <connection>scm:git:https://github.com/shokakucarrier/indy</connection>
+    <developerConnection>scm:git:https://github.com/shokakucarrier/indy</developerConnection>
+    <url>http://github.com/shokakucarrier/indy</url>
     <tag>HEAD</tag>
   </scm>
 
